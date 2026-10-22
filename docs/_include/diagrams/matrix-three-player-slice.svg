@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" width="760" role="img" aria-labelledby="title description">
+<title id="title">Three players: show a slice with the third contribution fixed at 0.</title>
+<desc id="description">A three by three slice of a three-player contribution game, with the third contribution fixed at zero. Rows vary x and columns vary y. Each cell lists Row, Column, and third-player payoffs. The outlined x=2, y=1 cell gives (0, 3, 6). Other third-player actions need other slices.</desc>
+<rect width="760" height="100%" rx="18" fill="#fff"/>
+<g font-family="system-ui, -apple-system, sans-serif" fill="#172033">
+<text x="28" y="34" font-size="20" fill="#172033" text-anchor="start" font-weight="700">THE PAYOFF MATRIX</text>
+<text x="28" y="64" font-size="17" fill="#172033" text-anchor="start" font-weight="400">Three players: show a slice with the third contribution fixed at 0.</text>
+<text x="448" y="100" font-size="18" fill="#7c3aed" text-anchor="middle" font-weight="700">COLUMN →</text>
+<text x="28" y="144" font-size="18" fill="#1d4ed8" text-anchor="start" font-weight="700">ROW ↓</text>
+<text x="261.333" y="138" font-size="20" fill="#7c3aed" text-anchor="middle" font-weight="600">y = 0</text>
+<text x="88" y="206" font-size="24" fill="#1d4ed8" text-anchor="middle" font-weight="700">x = 0</text>
+<text x="448" y="138" font-size="20" fill="#7c3aed" text-anchor="middle" font-weight="600">y = 1</text>
+<text x="88" y="286" font-size="24" fill="#1d4ed8" text-anchor="middle" font-weight="700">x = 1</text>
+<text x="634.667" y="138" font-size="20" fill="#7c3aed" text-anchor="middle" font-weight="600">y = 2</text>
+<text x="88" y="366" font-size="24" fill="#1d4ed8" text-anchor="middle" font-weight="700">x = 2</text>
+<g data-cell="0,0">
+<rect x="168" y="160" width="186.667" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="261.333" y="214" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">0</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">0</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">0</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<g data-cell="0,1">
+<rect x="354.667" y="160" width="186.667" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="448" y="214" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">2</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">-1</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">2</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<g data-cell="0,2">
+<rect x="541.333" y="160" width="186.667" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="634.667" y="214" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">4</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">-2</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">4</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<g data-cell="1,0">
+<rect x="168" y="240" width="186.667" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="261.333" y="294" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">-1</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">2</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">2</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<g data-cell="1,1">
+<rect x="354.667" y="240" width="186.667" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="448" y="294" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">1</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">1</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">4</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<g data-cell="1,2">
+<rect x="541.333" y="240" width="186.667" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="634.667" y="294" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">3</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">0</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">6</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<g data-cell="2,0">
+<rect x="168" y="320" width="186.667" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="261.333" y="374" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">-2</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">4</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">4</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<g data-cell="2,1">
+<rect x="354.667" y="320" width="186.667" height="80" fill="#eef8f7" stroke="#0f766e" stroke-width="3"/>
+<text x="448" y="342" font-size="14" fill="#115e59" text-anchor="middle" font-weight="600">example outcome</text>
+<text x="448" y="374" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">0</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">3</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">6</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<g data-cell="2,2">
+<rect x="541.333" y="320" width="186.667" height="80" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+<text x="634.667" y="374" text-anchor="middle" font-size="28" font-weight="650">
+<tspan fill="#475569">(</tspan>
+<tspan fill="#1d4ed8" data-player="0">2</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#7c3aed" data-player="1">2</tspan>
+<tspan fill="#475569">, </tspan>
+<tspan fill="#475569" data-player="2">8</tspan>
+<tspan fill="#475569">)</tspan></text>
+</g>
+<text x="28" y="434" font-size="17" fill="#172033" text-anchor="start" font-weight="400">Payoff order:</text>
+<text x="150" y="434" font-size="17" fill="#1d4ed8" text-anchor="start" font-weight="600">Row first</text>
+<text x="255" y="434" font-size="17" fill="#7c3aed" text-anchor="start" font-weight="600">Column second</text>
+<text x="425" y="434" font-size="17" fill="#475569" text-anchor="start" font-weight="600">third player last</text>
+<text x="28" y="470" font-size="17" fill="#172033" text-anchor="start" font-weight="400">Payoffs now list (Row, Column, third player). Third action = 0.</text>
+<text x="28" y="498" font-size="17" fill="#172033" text-anchor="start" font-weight="400">This is one slice, not the full three-player game.</text>
+</g>
+</svg>

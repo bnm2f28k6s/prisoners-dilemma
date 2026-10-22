@@ -3,3 +3,27 @@ title: "Prisoner's dilemma"
 base_path: /prisoners-dilemma
 colors:
   main: "#386E75"
+navigation:
+  - path: docs/levels
+    children:
+      - path: docs/levels/00-one-shot.md
+      - path: docs/levels/01-repetition.md
+      - path: docs/levels/02-horizon.md
+      - path: docs/levels/03-randomization.md
+      - path: docs/levels/04-execution.md
+      - path: docs/levels/05-observations.md
+      - path: docs/levels/06-payoffs.md
+      - path: docs/levels/07-actions.md
+      - path: docs/levels/08-players.md
+      - path: docs/levels/09-timing.md
+      - path: docs/levels/10-messages.md
+      - path: docs/levels/11-state.md
+      - path: docs/levels/12-chance.md
+      - path: docs/levels/13-hidden-state.md
+      - path: docs/levels/14-private-types.md
+      - path: docs/levels/15-matching.md
+      - path: docs/levels/16-membership.md
+      - path: docs/levels/17-adaptation.md
+      - path: docs/levels/18-rules.md
+  - path: docs/conceptual-model.md
+  - path: docs/sources.md

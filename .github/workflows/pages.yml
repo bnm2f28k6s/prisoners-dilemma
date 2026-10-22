@@ -31,6 +31,10 @@ jobs:
           printf '%s  %s\n' "$DOCTAVE_SHA256" "$RUNNER_TEMP/doctave.tar.gz" | sha256sum --check --strict
           tar -xzf "$RUNNER_TEMP/doctave.tar.gz" -C "$RUNNER_TEMP" \
             doctave-0.4.2-x86_64-unknown-linux-musl/doctave
+      - name: Check static payoff diagrams
+        run: |
+          python3 scripts/render-payoff-diagrams.py --check
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
       - name: Build and check links
         run: |
           "$RUNNER_TEMP/doctave-0.4.2-x86_64-unknown-linux-musl/doctave" --version
