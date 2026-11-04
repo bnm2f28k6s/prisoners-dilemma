@@ -31,16 +31,19 @@ jobs:
           printf '%s  %s\n' "$DOCTAVE_SHA256" "$RUNNER_TEMP/doctave.tar.gz" | sha256sum --check --strict
           tar -xzf "$RUNNER_TEMP/doctave.tar.gz" -C "$RUNNER_TEMP" \
             doctave-0.4.2-x86_64-unknown-linux-musl/doctave
-      - name: Check static payoff diagrams
+      - name: Check tutorial examples, diagrams, and helper scripts
         run: |
+          sh -n scripts/install-doctave.sh
           python3 scripts/render-payoff-diagrams.py --check
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
-      - name: Build and check links
+      - name: Build documentation
         run: |
           "$RUNNER_TEMP/doctave-0.4.2-x86_64-unknown-linux-musl/doctave" --version
           "$RUNNER_TEMP/doctave-0.4.2-x86_64-unknown-linux-musl/doctave" build --release
           test -s site/index.html
           test -f site/.nojekyll
+      - name: Check rendered links, anchors, assets, and page coverage
+        run: python3 scripts/check-site.py
       - name: Upload site only
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4

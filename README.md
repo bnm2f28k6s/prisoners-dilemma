@@ -40,6 +40,10 @@ Visit `http://127.0.0.1:4001/prisoners-dilemma/`. The helper maps the project pr
 
 The GitHub Actions workflow builds on pushes to `main` and publishes only `site/` to GitHub Pages. Pull requests run the build without deployment privileges. It uses upstream's Linux 0.4.2 archive, a recorded SHA-256 digest, and commit-pinned GitHub actions. The digest checks archive stability; upstream did not provide a release checksum or signature for independent verification.
 
+For future changes, use a feature branch and open a pull request against `main`. The same workflow checks the tutorial examples, reproducible payoff diagrams, installer shell syntax, and production build. It then checks rendered local page links, HTML/SVG anchors, directly referenced assets, the project-path prefix, and that every authored Markdown page has a built HTML page. Only a passing build on `main` reaches the deployment job; a passing PR does not publish a preview or merge itself.
+
+The rendered-site checker uses Python's standard library and makes no network requests. External source links, CSS-internal URLs, and JavaScript-generated navigation are outside this check. Keeping external availability out of the PR gate avoids failures caused by publisher rate limits or temporary outages. This is not a browser or accessibility audit. Its own tests include deliberately broken links, fragments, prefixes, assets, and missing pages so a checker that accepts everything cannot pass.
+
 `doctave.yaml` sets the project site's `/prisoners-dilemma` base path. Change it if hosting at a different path. Links inside `docs/` use site-root paths without `.md` or the base-path prefix, such as `/levels/00-one-shot`; Doctave adds the prefix. Navigation explicitly orders the levels. The homepage is reached through the site title and each lesson's Walkthrough link, rather than a custom root navigation entry, which triggers an upstream 0.4.2 bug under a non-root base path. Each documentation directory has its own `README.md` to avoid another base-path bug in generated directory listings.
 
 GitHub Pages must have its publishing source set to GitHub Actions. No custom domain, analytics, third-party plugins, application backend, or project secrets are configured.
@@ -47,7 +51,10 @@ GitHub Pages must have its publishing source set to GitHub Actions. No custom do
 Before committing or publishing:
 
 ```sh
+python3 scripts/render-payoff-diagrams.py --check
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ./bin/doctave build --release
+python3 scripts/check-site.py
 sh -n scripts/install-doctave.sh
 git diff --check
 gitleaks git --staged --redact --no-banner .
@@ -55,6 +62,8 @@ gitleaks git --log-opts="--all" --redact --no-banner .
 ```
 
 Use Gitleaks if installed, and separately inspect the intended files and Git metadata for private information. A clean scan is not a guarantee. Never commit the binary, generated site, credentials, local agent state, or source-build scratch.
+
+The rendered checker reads `base_path` from `doctave.yaml` by default. For isolated fixtures or another output directory, use `python3 scripts/check-site.py --site PATH --docs DOCS_PATH --base-path /PROJECT`. Run it after building; a missing or empty site is an error, not a skipped check.
 
 ## Static payoff diagrams
 
