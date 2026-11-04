@@ -39,6 +39,38 @@ For a symmetric prisoner's dilemma, `(C,C)=(R,R)`, `(C,D)=(S,T)`, `(D,C)=(T,S)`,
 payoff for player i = that player's function of the joint action
 ```
 
+## Build this version
+
+### Start from the previous version
+
+Keep Level 5's choice, execution, accounting, and delivery steps. Replace the hard-coded payoff table with a supplied payoff rule. For the comparisons here, use one round and zero execution error. Keep information permissions unchanged unless you explicitly choose a different observation setting.
+
+### Make the change
+
+1. Let the resolver receive a payoff table or function as part of `rules`. For every legal joint action, it must return one finite payoff for each player. Validate table coverage at setup; validate function results before committing an event.
+2. Preserve player identity when mapping returned values. Do not compute Column's payoff by swapping Row's inputs unless the supplied game explicitly has that symmetry.
+3. Leave policy and observation rules outside the payoff function. The payoff function reads executed actions and returns consequences; it does not ask the players to choose again.
+4. If you add the optional pure-equilibrium checker, enumerate legal joint actions. For each player, try every unilateral deviation while holding everyone else's action fixed. Mark the original joint action as an equilibrium only if no deviation gives that player a strictly higher payoff.
+
+```text
+payoffs = rules.payoff(executed)
+require exactly one finite payoff for every participant
+record actual payoffs and apply existing delivery permissions
+
+for each legal joint action:
+    keep it as a pure equilibrium only if, for every player,
+        no legal change of that player's action raises its payoff
+```
+
+The checker analyzes the one-shot stage game only. It does not solve the repeated game merely because the match runner can repeat this resolver.
+
+### Check your implementation
+
+- Swap in stag hunt. Row's best responses should be C against C and D against D; the pure equilibria should be C/C and D/D. Check the other authored tables too: chicken has C/D and D/C, harmony has C/C, and the original dilemma has D/D.
+- Apply only the asymmetric edit `(C, C) -> (6, 3)`. Expect the other three payoff pairs to stay unchanged. Row now prefers C against C; Column still prefers D against C. This catches an accidental mirrored edit.
+- Reject a table missing C/D or returning only Row's payoff before totals or deliveries change.
+- Reinstall the original table. All Level 5 traces, reports, and actual payoffs must match with the same inputs. No controller or execution change is needed.
+
 **Checkpoint:** In the stag-hunt square, what is Row's best response to C? To D?
 
 **Concept added:** arbitrary player-specific payoff functions. Restore the original square to recover the previous level. Do not add different players' utility numbers into a supposedly objective welfare score without an explicit comparability assumption.

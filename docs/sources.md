@@ -8,6 +8,8 @@ title: "Sources and teaching choices"
 
 The numbered levels and their order are this project's teaching design, not a standard taxonomy. They are not levels of recursive reasoning about other minds. All worked numerical examples and traces are constructed teaching examples, not empirical measurements or reported simulation results.
 
+The [build-along guide](/build-along) and each lesson's implementation steps are also our teaching choices. Their pseudocode, validation rules, sampling boundaries, and test inputs are not APIs from the sources below. They make the finite worked examples implementable without selecting a language or game library. The site's checks verify authored calculations and coverage; they are not a formal proof of the proposed process or a reader's implementation.
+
 The existing development research is retained in the repository at `research/strategic-game-foundations.md`. It records source locators, access limitations, and what was actually reviewed. This walkthrough uses that research and adds the official OpenSpiel and PettingZoo concept pages as background for a broader process description. No game library is selected or required.
 
 ## Foundations

@@ -6,13 +6,15 @@ title: From one choice to a general interaction
 
 Start with two people making one simultaneous choice. Then remove one constraint at a time. Let them meet again, face an uncertain ending, make mistakes, receive different information, and eventually act in a changing world with other participants.
 
-This is an initial conceptual walkthrough, not a simulator or an implementation specification. The aim is to understand which assumptions a general system would need to expose. We do not assume that every situation is a prisoner's dilemma, or that a more complicated strategy is better.
+This is a conceptual walkthrough and a build-along tutorial. You can use the explanations to understand the model, or implement each version in your own programming language. Every level explains what to retain, what to change, and how to check the result. We do not assume that every situation is a prisoner's dilemma, or that a more complicated strategy is better.
 
 **[Start at Level 0: one simultaneous choice](/levels/00-one-shot).** Each page links to the next.
 
+Building it yourself? Read the [build-along guide](/build-along) first for shared notation and a testing workflow. No particular language, framework, or interface is required.
+
 ## How to read the levels
 
-Each step names what changes, what stays fixed, a small example, and the concept we carry forward. It also explains how to recover the earlier model. Some examples temporarily turn earlier extensions off to isolate the new one; the earlier capabilities remain available.
+Each step names what changes, what stays fixed, a small example, and the concept we carry forward. Its **Build this version** section turns that change into data and logic to add, replace, or preserve. The checks include expected results, failure cases, and settings that recover the earlier implementation. Some examples temporarily turn earlier extensions off to isolate the new one; the earlier capabilities remain available.
 
 The order is a teaching route through independent choices, not a standard hierarchy. Imperfect information can exist in a one-shot game; many players need not imply noise. Later steps such as messages, hidden state, adaptation, and institutional choice expose uses of machinery already introduced. They are not all strictly larger mathematical classes.
 
@@ -44,7 +46,7 @@ For the first steps we keep the same payoff square so the transition is easy to 
 
 ## Where this leads
 
-The [combined conceptual model](/conceptual-model) gathers the settings into one description and an event-based pseudocode process. It separates the rules, actual world, player controllers, and evaluation. It also shows how to recover the one-shot and repeated examples, rather than leaving them behind.
+The [combined model](/conceptual-model) gathers the settings into one description and an event-based pseudocode process. It separates the rules, actual world, player controllers, and evaluation, then explains how to assemble and check your working versions. It also shows how to recover the one-shot and repeated examples, rather than leaving them behind.
 
 There is no claim that this endpoint covers every conceivable situation or supplies a universal winning strategy. Infinite spaces, continuous time, enforceable agreements, and unawareness need further treatment. The goal here is a clear first route from a small game to a broadly configurable interaction model.
 

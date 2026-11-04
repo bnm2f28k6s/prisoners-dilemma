@@ -31,6 +31,39 @@ after resolving and observing a round:
 
 A continuation probability and a discount factor are different concepts. A discount factor changes how a player values later payoffs; a stopping probability changes whether later rounds happen. They can yield similar expected-value formulas under particular assumptions, but should remain separate settings.
 
+## Build this version
+
+### Start from the previous version
+
+Keep Level 1's round resolver, payoff sum, deliveries, and memory updates. Replace only the fixed loop's stopping decision. Preserve the fixed-four-round option so existing tests still run without randomness.
+
+### Make the change
+
+1. Put duration behind a rule with two options: stop after N completed rounds, or continue with probability q after each completed round. The first round always happens in the random-continuation example.
+2. Validate `0 <= q < 1` for this terminating, undiscounted runner. A never-ending model requires a different utility criterion; do not accept q = 1 and silently impose a round cap.
+3. Supply a random-number source that your tests can replace with a fixed sequence. Draw a value `u` in `[0, 1)` only after resolution, payoff accounting, delivery, and memory update. Continue exactly when `u < q`. Keep this source separate from future policy or error draws.
+
+```text
+completed = 0
+repeat:
+    play, score, deliver, and update one round as in Level 1
+    completed = completed + 1
+    if duration is fixed:
+        if completed == round_limit: stop
+    otherwise:
+        u = next continuation draw in [0, 1)
+        if u >= q: stop
+```
+
+Each run returns its actual round count and actual totals. Compute expectations separately. An optional operational safety limit should report an incomplete run rather than claim that the game's stopping event occurred.
+
+### Check your implementation
+
+- Set q to 0.75 and feed continuation draws `0.20, 0.60, 0.90`. Expect three paid rounds. Two always-cooperate rules receive totals `(9, 9)`, not the expected totals `(12, 12)`.
+- Set q to zero. Expect one paid round even when the first draw is zero. At q = 0.75, a draw of exactly 0.75 stops; it does not continue.
+- Check the expectation separately: `1 / (1 - 0.75) = 4` rounds and `3 * 4 = 12` per always-cooperating player. A particular run need not have those values.
+- Select fixed duration 4. Expect exactly Level 1's traces and totals, with no continuation draws consumed. Reject q below zero or q = 1 in this runner.
+
 **Checkpoint:** If q is zero, is there any future response to deter defection?
 
 **Concept added:** a stopping rule rather than only a fixed round count. Recover Level 1 by choosing its fixed four-round rule. For a never-ending model, separately specify a well-defined criterion such as discounted utility; an undiscounted infinite sum may diverge.

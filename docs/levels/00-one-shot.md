@@ -54,6 +54,42 @@ Two players, two actions each, these known payoffs, simultaneous choices, determ
 
 For this first example we inspect deterministic choices. Randomized decision rules arrive at Level 3. The rules describe what can happen; a decision rule describes what a player chooses to do.
 
+## Build this version
+
+### Start from the previous version
+
+There is no previous implementation yet. Build a single round before adding a match loop or a user interface. You need a payoff lookup and two decision rules. A decision rule can initially return a fixed action so you can test the resolver without interactive input.
+
+The [build-along guide](/build-along) explains the shared notation. The names below are placeholders for your own functions and data, not a library to install.
+
+### Make the change
+
+1. Store the ordered player identities `Row, Column` and legal actions `{C, D}` for each. Store all four payoff pairs from the table above, keyed by `(Row action, Column action)`. Do not sort the actions when looking up a cell.
+2. Give each decision rule its own `view[player]` containing the public rules, but no opponent choice. Collect both choices into a temporary map. Calling the rules one after another is fine; passing Row's new choice to Column is not.
+3. Validate that both players supplied exactly one legal action. Reject a missing or invalid choice before assigning any payoff. Do not silently turn an invalid choice into D.
+4. Resolve the joint action once. Return payoffs keyed by player identity and an evaluator `record` of the completed event. Only then reveal the result and stop.
+
+```text
+choices = empty map
+for player in [Row, Column]:
+    choices[player] = choose(view[player])
+require choices has exactly Row and Column, each with C or D
+pair = payoff_table[(choices[Row], choices[Column])]
+payoffs = {Row: pair.first, Column: pair.second}
+record = {executed: copy of choices, payoffs: copy of payoffs}
+return payoffs, record
+```
+
+This resolver describes consequences, not which action is best. Keep a best-response calculation separate from the function that pays out a chosen cell.
+
+### Check your implementation
+
+- Submit each joint action. Expect `(C, C) -> (3, 3)`, `(C, D) -> (0, 5)`, `(D, C) -> (5, 0)`, and `(D, D) -> (1, 1)` in Row/Column order. The unequal cells catch reversed player identities.
+- Submit Row C with Column missing, then with Column X. Both should fail without producing a paid event.
+- Use a Column test rule that records its input. It must receive the same pre-choice information whether Row selects C or D. Run a second game and check that no result from the first appears unless you explicitly provided it.
+
+Keep these checks as the baseline for every later version.
+
 **Checkpoint:** Explain why Row would not improve by switching from D to C when Column chooses D. Then explain why both might still prefer `(C, C)`.
 
 **Concept carried forward:** players, legal actions, joint actions, and player-specific payoffs. A deterministic one-shot game can be summarized as `G = (players, action sets, payoff functions)`.

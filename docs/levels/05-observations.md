@@ -30,6 +30,37 @@ completed event -> separate permitted signal for each player
 player's next decision uses its signal history, not the evaluator's record
 ```
 
+## Build this version
+
+### Start from the previous version
+
+Keep Level 4's intention, execution, and actual-payoff records. Replace the accurate delivery step, not the resolver. The example below uses zero execution error and two fixed rounds so you can isolate a false report and its effect on the next choice.
+
+### Make the change
+
+1. Define a signal rule per recipient. It takes the completed event and creates only that player's permitted report. For this example, the round-1 report to Row says opponent D while the report to Column says opponent C.
+2. Separate `record`, the evaluator's actual event, from `view[player]`, the player's delivered information. Never pass the record, actual totals, or a mutable reference to either into a controller.
+3. Keep actual payoffs in `totals[player]`, but queue numerical payoff deliveries until the match ends. Both players know their own actions; intermediate views contain the opponent action report, not a true joint-action object.
+4. Update tit for tat from the delivered report. Give queued deliveries an event identifier and a due time so each arrives once. For this example, a missing action report leaves the last retained opponent report unchanged; with none yet, tit for tat opens with C. This is a tutorial convention, not a universal response to silence.
+
+```text
+record = resolve executed actions and compute actual payoffs
+add actual payoffs to evaluator totals
+for player in players:
+    report = signal rule(record, recipient = player)
+    deliver report without numerical payoff to view[player]
+    queue that player's numerical payoff for match end
+    update memory[player] using only delivered reports
+at match end: deliver queued own payoffs once
+```
+
+### Check your implementation
+
+- Resolve C/C. Expect evaluator payoffs `(3, 3)`, Row's opponent report D, and Column's opponent report C. With tit for tat, the next intended pair is `(D, C)`, even though the actual first outcome was C/C.
+- Inspect the inputs to both controllers before round 2. Neither may contain numerical payoffs, actual totals, true opponent actions, or the other player's private report. Checking only the displayed sensor label is insufficient.
+- Deliver no report and verify the declared memory behavior. At termination, verify each queued own reward arrives exactly once and never before an intermediate decision.
+- Restore accurate action reports and immediate own-payoff delivery. With the same intentions and execution inputs, expect Level 4's views, memory updates, and outcomes again.
+
 **Checkpoint:** Can two players leave the same round with different beliefs about it?
 
 **Concept added:** an observation law and delivery times for every information channel, including rewards. Accurate public action reports and the previous payoff visibility recover Level 4. Observing past actions is not advance visibility of a simultaneous current action, nor is it the technical definition of a perfect-information game.

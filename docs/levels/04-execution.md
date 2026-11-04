@@ -32,6 +32,38 @@ intended actions -> execution process -> executed actions
 executed actions -> payoff table
 ```
 
+## Build this version
+
+### Start from the previous version
+
+Keep Level 3's distributions and sampled intended actions. Insert an execution step between committing intentions and resolving payoffs. Do not implement mistakes by editing the policy's cooperation probability or the payoff table.
+
+### Make the change
+
+1. Add a validated error probability `epsilon` in `[0, 1]`. In this C/D example, independently flip each player's action when its execution draw is less than epsilon. The execution rule is specific to this action set; later action sets need their own rule.
+2. Keep separate `intended` and `executed` maps. Copy intentions before applying errors so the original choice is not lost or mutated.
+3. Feed only executed actions to the payoff lookup. Record both maps for evaluation. Deliver all completed executed actions, plus each player's own intention and payoff. Do not deliver the opponent's intention.
+4. Update tit for tat from the opponent's executed action, not from the intention stored in the evaluator record. Draw independently of policy and continuation randomness for this example.
+
+```text
+intended = collect and commit policy samples
+for player in players:
+    if execution_draw[player] < epsilon:
+        executed[player] = the other C/D action
+    otherwise:
+        executed[player] = intended[player]
+payoffs = payoff_table applied to executed
+record intended, executed, and payoffs for evaluation
+deliver completed execution and permitted own information
+```
+
+### Check your implementation
+
+- Set epsilon to 0.1, both intentions to C, and execution draws to Row 0.05 and Column 0.50. Expect intentions `(C, C)`, executions `(D, C)`, and payoffs `(5, 0)`. The intention record must still show C/C.
+- For two tit-for-tat rules, inject only that first error and then draws above epsilon. Expect intended pairs `(C, C), (C, D), (D, C), (C, D)` and executed pairs `(D, C), (C, D), (D, C), (C, D)` over four rounds.
+- At epsilon = 1, both C intentions become D and pay `(1, 1)`. Reject epsilon outside `[0, 1]`. A draw equal to epsilon does not flip.
+- Set epsilon to zero. Expect exactly Level 3's outcomes for the same policy and duration inputs. Turning off errors must not shift those other random inputs.
+
 **Checkpoint:** Did Row deliberately defect in round 1? Does Column's observation answer that question?
 
 **Concept added:** an execution law separating choice from action. Probability zero of error recovers the previous model. Changing the policy's cooperation probability would not represent the same mechanism.

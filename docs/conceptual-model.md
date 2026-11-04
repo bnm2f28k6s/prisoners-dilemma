@@ -6,7 +6,7 @@ title: "Putting the levels together"
 
 [Previous: Level 18](/levels/18-rules) | [Walkthrough](/) | [Sources](/sources)
 
-The result is a configurable description of an interaction, not a simulator design or a universal solution method. Earlier games become special settings of this description. Many later choices are independent, so a model need not switch on every extension.
+The result is a configurable description of an interaction and a set of small implementations you can build from the lessons. It is not a universal solution method or a production simulator specification. Earlier games become special settings of this description. Many later choices are independent, so a model need not switch on every extension.
 
 ## Four things to keep separate
 
@@ -22,6 +22,8 @@ A player's utility criterion belongs to the game being analyzed. An external rep
 ## The conceptual settings
 
 These are descriptive slots, not proposed classes, data types, or library interfaces.
+
+The [build-along guide](/build-along) uses short names such as `world` and `view[player]` to explain the examples. Those names do not require one class or module per row of this table.
 
 | Setting | Questions that must be answered | Introduced or exposed at |
 | --- | --- | --- |
@@ -97,6 +99,29 @@ Keep that square and permanent pair, schedule four simultaneous rounds, reveal e
 Choose a fixed roster of three contributors, known cost parameters, a publicly observed resource stock, independent replenishment chance, simultaneous withdrawals under a fully specified feasible-action rule, and a known finite horizon. Compare fixed decision rules without messages, private types, rematching, learning, or rule voting.
 
 This uses only selected later capabilities. To add private sensors, edit the information rule; do not accidentally edit the true stock transition. To add learning, edit the controller update; do not silently change the payoff function.
+
+## Assemble your working versions
+
+If you followed the build steps, you already have the pieces of this process. Connect the working versions instead of starting again with a large framework.
+
+1. Keep Level 0's outcome resolver as the simplest selectable game. Use Levels 6-8's supplied payoff rules, action sets, and identity-keyed maps where the selected game requires them.
+2. Let the match runner from Levels 1-2 own stopping and payoff accumulation. With Level 9's schedule, count completed material stages when using a fixed-round horizon, not message deliveries or individual sub-decisions. Other stopping rules must name their own event boundary.
+3. Place policy sampling, execution, environmental transitions, and observation delivery in the order their inputs require. Do not add a second execution pass when a scheduled sub-event already executed its action. Use separately addressed randomness unless the selected model explicitly couples shocks.
+4. Keep Levels 10-16's channels, world, types, matching, and membership in the runner's authoritative data. Pass each controller only its permitted view and its own memory. An inactive player can retain earned payoffs without being eligible for another choice.
+5. Run Level 17's update only on newly delivered experience. Apply Level 18's institutional settings only through its announced vote, activation, and expiry rules. Neither controller learning nor an ordinary message may rewrite the payoff rule.
+
+For each selected example, write down the initial configuration, controller rules, fixed test inputs, expected event trace, and expected payoffs. In a trace, distinguish an event being resolved from a report being delivered. Record which players were eligible, which acted, and which received a consequence. That makes duplicate scoring and early information delivery visible.
+
+### Final checks
+
+- Select the original one-round C/D configuration. All four cells must still match Level 0, with one paid event each.
+- Select four rounds, accurate completed-action reports, and tit for tat against always defect. Expect totals `(3, 8)`, with no policy update, membership change, or rule vote occurring in the background.
+- Select the three-player contribution game and submit `(2, 1, 0)`. Expect `(0, 3, 6)` without invoking a two-player table or a C/D execution flip.
+- With a hidden-state example, inspect every controller input, including legal-action notices and numerical rewards. Hidden world values must not appear through a different field or shared reference.
+- Feed an invalid choice or an invalid transition result. Reject it before world changes, totals, and deliveries are committed. A retry must not pay an event twice.
+- Run a new match after a match with noise, departures, or a subsidy vote. Initialize the selected setup again; no old pending actions, queued reports, controller memory, or temporary institution may survive by accident.
+
+These are integration checks for your implementation, not claims that a controller is optimal. The static site's test suite checks tutorial coverage and authored calculations; it cannot test code you build elsewhere.
 
 ## How to inspect any proposed extension
 

@@ -1,9 +1,10 @@
 # Prisoner's dilemma
 
-A small [Doctave](https://github.com/Doctave/doctave) teaching site. Walk from a one-shot prisoner's dilemma through Levels 0-18, relaxing one constraint or exposing one additional mechanism at a time. The endpoint is a configurable conceptual model with pseudocode, not an interactive simulator or an implementation specification.
+A small [Doctave](https://github.com/Doctave/doctave) teaching site. Walk from a one-shot prisoner's dilemma through Levels 0-18, relaxing one constraint or exposing one additional mechanism at a time. Each lesson includes a language-neutral build-along: what to keep, what to change, pseudocode, and concrete checks. The endpoint is a configurable interaction model, not an interactive simulator or a production implementation specification.
 
 - [Read the page](https://bnm2f28k6s.github.io/prisoners-dilemma/)
 - Start with the [walkthrough and level map](docs/README.md).
+- Use the [build-along guide](docs/build-along.md) for shared notation, event order, and repeatable tests in your own implementation.
 - Edit individual lessons in [`docs/levels/`](docs/levels/) and the [combined conceptual model](docs/conceptual-model.md).
 
 ## Local setup
@@ -68,6 +69,12 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
 The SVG source files are in `docs/_include/diagrams/` and are copied into `site/diagrams/` by Doctave. Diagram links use `/diagrams/name.svg` without the project prefix; the generator adds it, just as for page links.
+
+## Build-along tutorial checks
+
+Every numbered lesson keeps its conceptual explanation and adds a practical implementation change from the preceding version. Worked examples sometimes select simpler settings to isolate a mechanism; earlier capabilities remain available. The guide distinguishes illustrative pseudocode from existing repository APIs. This repository does not contain the reader's game runner.
+
+The standard-library test suite also checks level coverage and navigation, the structure of each build step, and calculations from the authored examples. Run the same `python3 -m unittest discover -s tests -v` command above. These checks validate the teaching material, not arbitrary implementations built from it. The published steps include their own outcome, information-flow, boundary, and backward-compatibility checks for readers to run.
 
 ## Sources and scope
 

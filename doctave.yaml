@@ -4,6 +4,7 @@ base_path: /prisoners-dilemma
 colors:
   main: "#386E75"
 navigation:
+  - path: docs/build-along.md
   - path: docs/levels
     children:
       - path: docs/levels/00-one-shot.md

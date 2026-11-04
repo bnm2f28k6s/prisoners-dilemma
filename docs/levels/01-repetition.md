@@ -55,6 +55,39 @@ Repetition makes responses to past behavior possible. It does not guarantee coop
 
 Tit for tat needs one previous opponent action. Grim trigger needs one flag, not an unlimited transcript. A fixed strategy that reads history is not automatically learning. Limiting memory is an optional restriction on the player, not the next step toward a more general game.
 
+## Build this version
+
+### Start from the previous version
+
+Keep Level 0's simultaneous-choice collection, action validation, and payoff lookup. Wrap that resolver in a match runner instead of copying its table into a new implementation. The match runner owns duration, accumulated payoffs, and information carried between rounds.
+
+### Make the change
+
+1. Add a fixed `round_limit = 4`, `totals[player] = 0`, and initially empty `memory[player]`. Initialize them once per match, not once per round. Keep stage payoffs separate from totals.
+2. Change the decision rule to accept `view[player]` and `memory[player]`. For tit for tat, return C when there is no previous opponent action; otherwise return that action. Always defect still returns D for every input.
+3. After both actions resolve, add each payoff to its own total. Deliver the completed joint action and each player's own payoff. Only then update each player's memory. Neither decision in round 2 may see the other's round-2 action.
+4. Stop after the fourth paid round. A new match resets both totals and controller memory.
+
+```text
+initialize totals to zero and memory to empty for each player
+for round in 1 through round_limit:
+    choices = collect legal choices from current views and memories
+    payoffs, record = resolve together using Level 0's payoff table
+    for player in players:
+        totals[player] = totals[player] + payoffs[player]
+        view[player] = completed actions and that player's payoff
+    update each memory from that player's delivered view
+return totals
+```
+
+Do not hand the evaluator's full match log to a decision rule. This level permits the completed actions, but later levels will restrict reports. A separate delivery step lets you change that permission without rewriting strategies.
+
+### Check your implementation
+
+- With Row tit for tat and Column always defect, expect joint actions `(C, D), (D, D), (D, D), (D, D)` and totals `(3, 8)`.
+- With two tit-for-tat rules, expect four `(C, C)` outcomes and totals `(12, 12)`. Restart the match after a defection and verify tit for tat opens with C again.
+- Set `round_limit = 1`. Every fixed-action pair must return Level 0's payoffs, with exactly one resolution and no second decision call. Reject a non-positive or non-integer limit before play for this finite runner.
+
 **Checkpoint:** If both use tit for tat, what happens in all four rounds? What is each total?
 
 **Concept added:** a horizon, a payoff aggregation rule, observations of completed play, and history-dependent strategies. Recover Level 0 by setting the horizon to one.

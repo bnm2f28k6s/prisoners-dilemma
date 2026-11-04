@@ -27,6 +27,49 @@ legal rule-selection action
 
 Like adaptation, this can already be represented inside earlier machinery: treat the institution as world state and votes as actions. The new step is exposing a formerly external setting to strategic choice. It is not a theorem that another, unrestricted kind of game has been reached.
 
+## Build this version
+
+### Start from the previous version
+
+Keep Level 17's controller boundaries, permitted deliveries, and commit-before-resolution ordering. Add a rule-selection event, not controller permission to edit rules. Select two fixed contributors with contributions `{0, 1, 2}`, benefit coefficient 2, known cost 3 each, and identity execution. Disable C/D-specific adaptation; learning remains optional with a contribution-appropriate update.
+
+### Make the change
+
+1. Keep the outer procedure in `rules`. Store `world.subsidy` and its target contribution-phase identifier in world state. Each cycle has a simultaneous vote, public result delivery, then exactly one simultaneous contribution phase.
+2. Give each player legal votes `{yes, no}`. Require one valid vote from each identity; missing votes are errors, not implicit consent. Set subsidy to 1 only for unanimous yes, otherwise 0. Voting itself has zero payoff. Messages cannot set this field.
+3. Our tutorial reserves 4 external units per phase, the maximum subsidy for two contributions of 2. Validate before voting. Deduct actual spending from that reserve and release unused units afterward; never subtract it from player payoffs or carry it into another phase.
+4. Deliver the adopted setting before contribution choices. Resolve committed contributions using the setting tagged for this phase, then expire it immediately, before the next vote. Rejected contribution input must not pay, spend, or expire the subsidy.
+
+```text
+input: phase id k, rules, world, totals, permitted views
+require external reserve for k >= 4
+beforeVote = copy permitted views
+votes = choose from beforeVote[p] with legal[p] = {yes, no}
+validate identity-keyed votes; commit all votes
+world.subsidy = 1 if every votes[p] == yes else 0
+world.subsidyPhase = k
+deliver adopted setting to both players
+beforeContribution = copy permitted views after setting delivery
+joint = choose from beforeContribution[p] with legal[p] = {0, 1, 2}
+validate and commit joint; require world.subsidyPhase == k
+for each p:
+    payoff[p] = 2 * sum(joint.values) - 3 * joint[p]
+                + world.subsidy * joint[p]
+    totals[p] += payoff[p]
+spend world.subsidy * sum(joint.values) from reserve k
+record votes, contributions, payoffs, spending for evaluator
+world.subsidy = 0; world.subsidyPhase = none
+release unused reserve; deliver configured results and expiry
+result: one subsidized or unsubsidized phase, settled and expired
+```
+
+### Check your implementation
+
+- Given unanimous yes and contributions `(2, 2)`, expect payoffs `(4, 4)` and spending 4. After expiry, the same contributions without adoption earn `(2, 2)` and spend zero.
+- Given votes `(yes, no)` and contributions `(2, 0)`, expect `(-2, 4)` and zero spending; unanimous yes instead gives `(0, 4)` and spending 2.
+- Reject a missing vote, contribution 3, or reserve below 4 without partial settlement. A later phase must not reuse the expired setting.
+- For backward compatibility, disable voting and fix subsidy at zero. The selected contribution resolver and fixed controllers then work as in Level 17's configurable setup.
+
 **Checkpoint:** Who can change the subsidy, and when does that change affect contributions?
 
 **Concept added:** endogenous institutional settings under fixed higher-level rules. Disable rule-selection actions, or leave one legal institutional setting, to recover Level 17. A model still needs a defined outer rule for interpreting events; "anything may happen" is not a usable specification.

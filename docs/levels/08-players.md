@@ -35,6 +35,39 @@ payoffs = {player: that player's payoff for every participant}
 
 A two-dimensional square is no longer the general representation. Do not replace a genuinely group-dependent payoff with a sum of pairwise prisoner's dilemmas unless that is an explicit modeling assumption. Threshold public goods, for example, can depend on the entire group reaching a target.
 
+## Build this version
+
+### Start from the previous version
+
+Keep Level 7's player-specific legal actions, distributions, and supplied payoff function. Replace the two fixed player slots in the runner with a roster of stable identities. For this example, use Row, Column, and Third with contribution actions and identity execution.
+
+### Make the change
+
+1. Initialize views, memories, totals, and legal-action sets by identity for every roster member. Treat the roster's display order separately from the keys used for accounting.
+2. Collect one intended action per participant from pre-event information. Check that the joint-action keys match the roster exactly. A missing Third action is not an implicit zero.
+3. Replace the two-input payoff calculation with a group sum. Return a map with exactly the same player keys. Compute each cost from that player's own executed contribution.
+4. Generalize delivery and accounting loops as well as choice collection. A player contributing zero still receives the public benefit. Render a tuple only at the presentation boundary, using the declared order Row, Column, Third.
+
+```text
+require keys(executed) == roster
+benefit = 2 * sum(executed[player] for player in roster)
+for player in roster:
+    payoffs[player] = benefit - 3 * executed[player]
+require keys(payoffs) == roster
+for player in roster:
+    totals[player] = totals[player] + payoffs[player]
+deliver only each player's permitted information
+```
+
+The two-dimensional diagram fixes Third's contribution at zero for display. Your resolver must accept all three inputs, not restrict Third to the displayed slice. There are 27 legal joint actions in this finite example.
+
+### Check your implementation
+
+- Submit `{Row: 2, Column: 1, Third: 0}`. Expect `{Row: 0, Column: 3, Third: 6}`. Increase only Third to 1 and expect `(2, 5, 5)` in display order. At `(2, 2, 2)`, expect `(6, 6, 6)`.
+- Supply the same keyed choices in a different iteration order. Each identity must receive the same payoff. Reversing roster order must not exchange balances.
+- Reject a missing Third action, an extra unknown player, or duplicate roster identities. Do not partially pay the first two players before discovering an invalid third action.
+- Select only Row and Column and the same group-sum formula. Every legal contribution pair must reproduce Level 7, including `(2, 1) -> (0, 3)`.
+
 **Checkpoint:** If only the third player increases its contribution from 0 to 1 in the first example, what happens to all three payoffs?
 
 **Concept added:** an indexed set of participants and a payoff vector of matching size. Select two players to recover the previous level. Entry and exit during play remain separate extensions.
